@@ -1,0 +1,24 @@
+name: Push-to-EC2
+
+# Trigger deployment only on push to master branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conectando na EC2 e atualizando repositorio
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/freela-order-service
+            git pull
+            mvn clean package
+            sudo systemctl restart freela
