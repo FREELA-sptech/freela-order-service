@@ -1,5 +1,6 @@
 package freela.order.service.domain.model.entities;
 
+import freela.order.service.domain.model.enums.EStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Order {
     private Integer userId;
     @OneToOne
     private Proposal proposalAccepted;
-    private boolean isAccepted;
+    private EStatus status;
 
     public Order(String description, String title, Double value, String deadline, Integer userId) {
         this.description = description;
@@ -31,5 +32,6 @@ public class Order {
         this.value = value;
         this.deadline = deadline;
         this.userId = userId;
+        this.status = EStatus.OPEN;
     }
 }

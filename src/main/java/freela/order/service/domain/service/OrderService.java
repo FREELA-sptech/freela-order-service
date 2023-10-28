@@ -1,8 +1,10 @@
 package freela.order.service.domain.service;
 
 import freela.order.service.domain.model.entities.*;
+import freela.order.service.domain.model.enums.EStatus;
 import freela.order.service.domain.model.request.CreateOrderRequest;
 import freela.order.service.domain.model.request.UpdateOrderRequest;
+import freela.order.service.domain.model.response.OrderResponse;
 import freela.order.service.domain.service.interfaces.IOrderService;
 import freela.order.service.infra.repository.*;
 import freela.order.service.web.exceptions.NotFoundException;
@@ -87,25 +89,33 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order getById(Integer orderId) {
-        return this.orderRepository.findById(orderId).orElseThrow(
+    public OrderResponse getById(Integer orderId) {
+        Order order = this.orderRepository.findById(orderId).orElseThrow(
                 () -> new NotFoundException("Ordem nao encontrada!")
         );
+
+        List<Proposal> proposalsForOrder = this.proposalRepository.findAllByOrderId(order.getId());
+
+        return new OrderResponse(order, proposalsForOrder);
     }
 
     @Override
-    public List<Order> getAllOrdersBySubCategories(List<Integer> subCategoriesIds, String orderType) {
-        List<SubCategory> subCategories = subCategoriesIds.stream()
-                .map(subCategoryRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+    public List<OrderResponse> getAllOrdersBySubCategories(List<Integer> subCategoriesIds, String orderType) {
+        List<SubCategory> subCategories = subCategoryRepository.findAllByIdIn(subCategoriesIds);
 
-        List<Order> ordersTotal = orderRepository.findAllByIsAcceptedFalse();
+        List<Order> ordersTotal = orderRepository.findAllByStatus(EStatus.OPEN);
+        List<OrderResponse> orderResponses = new ArrayList<>();
 
-        return ordersTotal.stream()
-                .filter(order -> orderContainsSubCategories(order, subCategories))
-                .collect(Collectors.toList());
+        for (Order order : ordersTotal) {
+            List<Proposal> proposalsForOrder = proposalRepository.findAllByOrderId(order.getId());
+
+            if (orderContainsSubCategories(order, subCategories)) {
+                OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder);
+                orderResponses.add(orderResponse);
+            }
+        }
+
+        return orderResponses;
     }
 
     private boolean orderContainsSubCategories(Order order, List<SubCategory> subCategories) {

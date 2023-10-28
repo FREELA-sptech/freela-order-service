@@ -1,5 +1,6 @@
 package freela.order.service.domain.model.entities;
 
+import freela.order.service.domain.model.enums.EStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,17 +26,16 @@ public class Proposal {
     private Integer userId;
     private String description;
     private String deadline;
-    private Integer orderId;
-    private Boolean isAccepted;
-    private Boolean isRefused;
+    private EStatus status;
+    @ManyToOne
+    private Order order;
 
-    public Proposal(Double value, Integer userId, String description, String deadline, Integer orderId, Boolean isAccepted, Boolean isRefused) {
+    public Proposal(Double value, Integer userId, String description, String deadline, Order order) {
         this.value = value;
         this.userId = userId;
         this.description = description;
         this.deadline = deadline;
-        this.orderId = orderId;
-        this.isAccepted = isAccepted;
-        this.isRefused = isRefused;
+        this.order = order;
+        this.status = EStatus.OPEN;
     }
 }

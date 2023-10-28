@@ -1,9 +1,11 @@
 package freela.order.service.domain.service;
 
+import freela.order.service.domain.model.entities.Order;
 import freela.order.service.domain.model.entities.Proposal;
 import freela.order.service.domain.model.request.CreateProposalRequest;
 import freela.order.service.domain.model.request.UpdateProposalRequest;
 import freela.order.service.domain.service.interfaces.IProposalService;
+import freela.order.service.infra.repository.OrderRepository;
 import freela.order.service.infra.repository.ProposalRepository;
 import freela.order.service.web.exceptions.NotFoundException;
 import org.aspectj.weaver.patterns.IfPointcut;
@@ -14,22 +16,26 @@ import java.util.List;
 @Service
 public class ProposalService implements IProposalService {
     private final ProposalRepository proposalRepository;
+    private final OrderRepository orderRepository;
 
-    public ProposalService(ProposalRepository proposalRepository) {
+    public ProposalService(ProposalRepository proposalRepository, OrderRepository orderRepository) {
         this.proposalRepository = proposalRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
     public Proposal create(Integer userId, CreateProposalRequest createProposalRequest, Integer orderId) {
+        Order order = this.orderRepository.findById(orderId).orElseThrow(
+                () -> new NotFoundException("Ordem nao encontrada!")
+        );
+
         return proposalRepository.save(
                 new Proposal(
                         createProposalRequest.getValue(),
                         userId,
                         createProposalRequest.getDescription(),
                         createProposalRequest.getDeadline(),
-                        orderId,
-                        false,
-                        false
+                        order
                         ));
     }
 
