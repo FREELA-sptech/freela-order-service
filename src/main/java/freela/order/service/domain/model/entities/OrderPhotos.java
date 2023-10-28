@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 
-@Entity
+@Entity(name = "order_photos_bff")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

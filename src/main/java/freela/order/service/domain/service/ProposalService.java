@@ -2,6 +2,7 @@ package freela.order.service.domain.service;
 
 import freela.order.service.domain.model.entities.Order;
 import freela.order.service.domain.model.entities.Proposal;
+import freela.order.service.domain.model.enums.EStatus;
 import freela.order.service.domain.model.request.CreateProposalRequest;
 import freela.order.service.domain.model.request.UpdateProposalRequest;
 import freela.order.service.domain.service.interfaces.IProposalService;
@@ -65,8 +66,8 @@ public class ProposalService implements IProposalService {
                 () -> new NotFoundException("Proposta nao encontrada!")
         );
 
-        proposal.setIsAccepted(false);
-        proposal.setIsRefused(true);
+        proposal.setStatus(EStatus.REFUSED);
+
         this.proposalRepository.save(proposal);
         return true;
     }

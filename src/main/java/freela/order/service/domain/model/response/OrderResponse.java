@@ -2,9 +2,11 @@ package freela.order.service.domain.model.response;
 
 import freela.order.service.domain.model.entities.Order;
 import freela.order.service.domain.model.entities.Proposal;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class OrderResponse extends Order {
     private List<Proposal> proposals;
 
