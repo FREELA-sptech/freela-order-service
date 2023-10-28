@@ -2,6 +2,7 @@ package freela.order.service.domain.model.response;
 
 import freela.order.service.domain.model.entities.Order;
 import freela.order.service.domain.model.entities.Proposal;
+import freela.order.service.domain.model.entities.SubCategory;
 import lombok.Data;
 
 import java.util.List;
@@ -9,8 +10,9 @@ import java.util.List;
 @Data
 public class OrderResponse extends Order {
     private List<Proposal> proposals;
+    private List<SubCategory> subCategories;
 
-    public OrderResponse(Order order, List<Proposal> proposals) {
+    public OrderResponse(Order order, List<Proposal> proposals, List<SubCategory> subCategories) {
         super(
                 order.getId(),
                 order.getDescription(),
@@ -22,5 +24,6 @@ public class OrderResponse extends Order {
                 order.getStatus()
         );
         this.proposals = proposals;
+        this.subCategories = subCategories;
     }
 }

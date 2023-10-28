@@ -95,8 +95,9 @@ public class OrderService implements IOrderService {
         );
 
         List<Proposal> proposalsForOrder = this.proposalRepository.findAllByOrderId(order.getId());
+        List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
 
-        return new OrderResponse(order, proposalsForOrder);
+        return new OrderResponse(order, proposalsForOrder, subCategoriesForOrder);
     }
 
     @Override
