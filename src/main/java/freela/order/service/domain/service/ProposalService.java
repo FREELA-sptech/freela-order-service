@@ -30,14 +30,16 @@ public class ProposalService implements IProposalService {
                 () -> new NotFoundException("Ordem nao encontrada!")
         );
 
-        return proposalRepository.save(
+        Proposal proposal = proposalRepository.save(
                 new Proposal(
                         createProposalRequest.getValue(),
                         userId,
                         createProposalRequest.getDescription(),
                         createProposalRequest.getDeadline(),
                         order
-                        ));
+                ));
+
+        return proposal;
     }
 
     @Override
@@ -61,12 +63,12 @@ public class ProposalService implements IProposalService {
     }
 
     @Override
-    public Boolean refuse(Integer proposalId) {
+    public Boolean changeStatus(Integer proposalId, EStatus status) {
         Proposal proposal = this.proposalRepository.findById(proposalId).orElseThrow(
                 () -> new NotFoundException("Proposta nao encontrada!")
         );
 
-        proposal.setStatus(EStatus.REFUSED);
+        proposal.setStatus(status);
 
         this.proposalRepository.save(proposal);
         return true;

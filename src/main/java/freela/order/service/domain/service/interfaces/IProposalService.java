@@ -1,6 +1,7 @@
 package freela.order.service.domain.service.interfaces;
 
 import freela.order.service.domain.model.entities.Proposal;
+import freela.order.service.domain.model.enums.EStatus;
 import freela.order.service.domain.model.request.CreateProposalRequest;
 import freela.order.service.domain.model.request.UpdateProposalRequest;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,6 @@ public interface IProposalService {
     List<Proposal> findProposalsByUserId(Integer userId);
     List<Proposal> findAllProposalsByOrderId(Integer orderId);
     Boolean delete(Integer proposalId);
-    Boolean refuse(Integer proposalId);
+    Boolean changeStatus(Integer proposalId, EStatus status);
     Proposal update(Integer proposalId, UpdateProposalRequest updateProposalRequest);
 }

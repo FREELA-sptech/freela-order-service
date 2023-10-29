@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity(name = "proposal_bff")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
