@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SubCategoryRepository extends JpaRepository<SubCategory,Integer> {
     List<SubCategory> findAllByIdIn(List<Integer> subCategoryIds);
+
 }

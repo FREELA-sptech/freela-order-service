@@ -121,6 +121,22 @@ public class OrderService implements IOrderService {
         return orderResponses;
     }
 
+    @Override
+    public List<OrderResponse> getByUserId(Integer userId) {
+        List<Order> ordersTotal = orderRepository.findAllByUserId(userId);
+        List<OrderResponse> orderResponses = new ArrayList<>();
+
+        for (Order order : ordersTotal) {
+            List<Proposal> proposalsForOrder = proposalRepository.findAllByOrderId(order.getId());
+            List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
+
+            OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder, subCategoriesForOrder);
+            orderResponses.add(orderResponse);
+        }
+
+        return orderResponses;
+    }
+
     private boolean orderContainsSubCategories(Order order, List<SubCategory> subCategories) {
         List<SubCategory> orderSubCategories = this.orderInterestService.getAllSubCategoriesByOrder(order);
 

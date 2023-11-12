@@ -15,4 +15,5 @@ public interface IOrderService {
     Boolean delete(Integer order);
     OrderResponse getById(Integer orderId);
     List<OrderResponse> getAllOrdersBySubCategories(List<Integer> subCategoriesIds, String orderType);
+    List<OrderResponse> getByUserId(Integer userId);
 }

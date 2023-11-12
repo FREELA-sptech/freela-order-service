@@ -50,6 +50,16 @@ public class OrderController {
     }
 
     @ApiResponses({
+            @ApiResponse(responseCode = "204", description =
+                    "Lista não encontrada.", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "200", description = "Lista completa.")
+    })
+    @GetMapping("user/{userId}")
+    public ResponseEntity<List<OrderResponse>> getByUserId(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(orderService.getByUserId(userId));
+    }
+
+    @ApiResponses({
             @ApiResponse(responseCode = "404", description =
                     "Ordem não encontrada.", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "200", description = "Ordem Encontrada.")
