@@ -97,8 +97,9 @@ public class OrderService implements IOrderService {
 
         List<Proposal> proposalsForOrder = this.proposalRepository.findAllByOrderId(order.getId());
         List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
+        List<OrderPhotos> photosForOrder = this.orderPhotoRepository.findAllByOrder(order);
 
-        return new OrderResponse(order, proposalsForOrder, subCategoriesForOrder);
+        return new OrderResponse(order, proposalsForOrder, subCategoriesForOrder, photosForOrder);
     }
 
     @Override
@@ -111,9 +112,10 @@ public class OrderService implements IOrderService {
         for (Order order : ordersTotal) {
             List<Proposal> proposalsForOrder = proposalRepository.findAllByOrderId(order.getId());
             List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
+            List<OrderPhotos> photosForOrder = this.orderPhotoRepository.findAllByOrder(order);
 
             if (orderContainsSubCategories(order, subCategories)) {
-                OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder, subCategoriesForOrder);
+                OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder, subCategoriesForOrder, photosForOrder);
                 orderResponses.add(orderResponse);
             }
         }
@@ -129,8 +131,9 @@ public class OrderService implements IOrderService {
         for (Order order : ordersTotal) {
             List<Proposal> proposalsForOrder = proposalRepository.findAllByOrderId(order.getId());
             List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
+            List<OrderPhotos> photosForOrder = this.orderPhotoRepository.findAllByOrder(order);
 
-            OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder, subCategoriesForOrder);
+            OrderResponse orderResponse = new OrderResponse(order, proposalsForOrder, subCategoriesForOrder, photosForOrder);
             orderResponses.add(orderResponse);
         }
 
