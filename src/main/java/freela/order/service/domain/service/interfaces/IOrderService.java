@@ -5,12 +5,14 @@ import freela.order.service.domain.model.request.CreateOrderRequest;
 import freela.order.service.domain.model.request.UpdateOrderRequest;
 import freela.order.service.domain.model.response.OrderResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IOrderService {
-    Order create(CreateOrderRequest createOrderRequest);
+    Order create(CreateOrderRequest createOrderRequest, ArrayList<MultipartFile> photos);
     Order update(Integer orderId, UpdateOrderRequest updateOrderRequest);
     Boolean delete(Integer order);
     OrderResponse getById(Integer orderId);

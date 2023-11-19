@@ -10,11 +10,12 @@ import java.util.List;
 
 @Data
 public class OrderResponse extends Order {
-    private List<Proposal> proposals;
+    private List<ProposalResponse> proposals;
     private List<SubCategory> subCategories;
     private List<OrderPhotos> photos;
+    private UserNameDetails user;
 
-    public OrderResponse(Order order, List<Proposal> proposals, List<SubCategory> subCategories, List<OrderPhotos> photos) {
+    public OrderResponse(Order order, List<ProposalResponse> proposals, List<SubCategory> subCategories, List<OrderPhotos> photos, UserNameDetails user) {
         super(
                 order.getId(),
                 order.getDescription(),
@@ -28,5 +29,6 @@ public class OrderResponse extends Order {
         this.proposals = proposals;
         this.subCategories = subCategories;
         this.photos = photos;
+        this.user = user;
     }
 }

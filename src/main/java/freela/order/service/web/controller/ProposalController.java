@@ -4,6 +4,7 @@ import freela.order.service.domain.model.entities.Proposal;
 import freela.order.service.domain.model.enums.EStatus;
 import freela.order.service.domain.model.request.CreateProposalRequest;
 import freela.order.service.domain.model.request.UpdateProposalRequest;
+import freela.order.service.domain.model.response.ProposalResponse;
 import freela.order.service.domain.service.ProposalService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +37,7 @@ public class ProposalController {
             @ApiResponse(responseCode = "201", description = "Criado!.")
     })
     @PostMapping("/{orderId}/{userId}")
-    public ResponseEntity<Proposal> post(
+    public ResponseEntity<ProposalResponse> post(
             @PathVariable @NotNull int orderId,
             @PathVariable @NotNull int userId,
             @RequestBody CreateProposalRequest request
@@ -51,7 +52,7 @@ public class ProposalController {
             @ApiResponse(responseCode = "201", description = "Criado!.")
     })
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Proposal>> findProposalsByUserid(@PathVariable Integer userId) {
+    public ResponseEntity<List<ProposalResponse>> findProposalsByUserid(@PathVariable Integer userId) {
         return ResponseEntity.ok(proposalService.findProposalsByUserId(userId));
     }
 

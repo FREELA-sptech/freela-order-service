@@ -1,5 +1,6 @@
 package freela.order.service.web.controller;
 
+import com.google.gson.Gson;
 import freela.order.service.domain.model.entities.Order;
 import freela.order.service.domain.model.request.CreateOrderRequest;
 import freela.order.service.domain.model.request.UpdateOrderRequest;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +38,15 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Ordem Criada.")
     })
     @PostMapping
-    public ResponseEntity<Order> post(@RequestBody @Valid CreateOrderRequest request) {
-        return ResponseEntity.ok(orderService.create(request));
+    public ResponseEntity<Order> post(
+            String createOrderRequest,
+            ArrayList<MultipartFile> photos
+    ) {
+        Gson gson = new Gson();
+
+        CreateOrderRequest request = gson.fromJson(createOrderRequest, CreateOrderRequest.class);
+
+        return ResponseEntity.ok(orderService.create(request, photos));
     }
 
     @ApiResponses({

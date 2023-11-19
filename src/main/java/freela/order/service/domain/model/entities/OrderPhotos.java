@@ -21,4 +21,9 @@ public class OrderPhotos {
     private Order order;
     @Lob
     private byte[] photo;
+
+    public OrderPhotos(Order order, byte[] photo) {
+        this.order = order;
+        this.photo = photo;
+    }
 }
