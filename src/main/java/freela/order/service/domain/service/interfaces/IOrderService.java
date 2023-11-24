@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IOrderService {
     Order create(CreateOrderRequest createOrderRequest, ArrayList<MultipartFile> photos);
-    Order update(Integer orderId, UpdateOrderRequest updateOrderRequest);
+    OrderResponse update(Integer orderId, UpdateOrderRequest updateOrderRequest, ArrayList<MultipartFile> newPhotos);
     Boolean delete(Integer order);
     OrderResponse getById(Integer orderId);
     List<OrderResponse> getAllOrdersBySubCategories(List<Integer> subCategoriesIds, String orderType);

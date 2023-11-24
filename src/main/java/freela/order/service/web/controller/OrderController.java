@@ -84,8 +84,16 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Ordem atualizada com sucesso.")
     })
     @PatchMapping("/{orderId}")
-    public ResponseEntity<Object> update(@PathVariable Integer orderId, @RequestBody UpdateOrderRequest request) {
-        return ResponseEntity.ok(orderService.update(orderId, request));
+    public ResponseEntity<Object> update(
+            String updateOrderRequest,
+            ArrayList<MultipartFile> newPhotos,
+            @PathVariable Integer orderId
+    ) {
+        Gson gson = new Gson();
+
+        UpdateOrderRequest request = gson.fromJson(updateOrderRequest, UpdateOrderRequest.class);
+
+        return ResponseEntity.ok(orderService.update(orderId, request, newPhotos));
     }
 
     @ApiResponses({

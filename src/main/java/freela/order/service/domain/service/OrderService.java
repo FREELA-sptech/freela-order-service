@@ -55,13 +55,15 @@ public class OrderService implements IOrderService {
         );
 
         this.orderInterestService.create(subCategoriesIds, order);
-        this.orderPhotoService.create(photos, order);
+        if (photos != null) {
+            this.orderPhotoService.create(photos, order);
+        }
 
         return order;
     }
 
     @Override
-    public Order update(Integer orderId, UpdateOrderRequest updateOrderRequest) {
+    public OrderResponse update(Integer orderId, UpdateOrderRequest updateOrderRequest, ArrayList<MultipartFile> newPhotos) {
         Order order = this.orderRepository.findById(orderId).orElseThrow(
                 () -> new NotFoundException("Ordem nao encontrada!")
         );
@@ -71,11 +73,36 @@ public class OrderService implements IOrderService {
         order.setTitle(updateOrderRequest.getTitle());
         order.setValue(updateOrderRequest.getValue());
 
+        this.orderPhotoService.delete(updateOrderRequest.getDeletedPhotos());
+
+        if (newPhotos != null) {
+            this.orderPhotoService.create(newPhotos, order);
+        }
+
         this.orderInterestService.updateOrderInterest(updateOrderRequest.getSubCategoriesIds(), order);
 
         orderRepository.save(order);
 
-        return order;
+        List<Proposal> proposalsForOrder = this.proposalRepository.findAllByOrderId(order.getId());
+        List<ProposalResponse> proposalResponse = new ArrayList<>();
+        for (Proposal proposal : proposalsForOrder) {
+            User userProposal = this.userRepository.findById(proposal.getUserId()).orElseThrow(
+                    () -> new NotFoundException("Usuário não encontrado!")
+            );
+
+            UserNameDetails userNameDetailsProposals = new UserNameDetails(userProposal);
+
+            proposalResponse.add(new ProposalResponse(proposal, userNameDetailsProposals));
+        }
+        List<SubCategory> subCategoriesForOrder = this.orderInterestService.getAllSubCategoriesByOrder(order);
+        List<OrderPhotos> photosForOrder = this.orderPhotoRepository.findAllByOrder(order);
+        User user = this.userRepository.findById(order.getUserId()).orElseThrow(
+                () -> new NotFoundException("Usuário não encontrado!")
+        );
+
+        UserNameDetails userNameDetails = new UserNameDetails(user);
+
+        return new OrderResponse(order, proposalResponse, subCategoriesForOrder, photosForOrder, userNameDetails);
     }
 
     @Override

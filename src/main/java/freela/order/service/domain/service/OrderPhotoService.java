@@ -5,11 +5,13 @@ import freela.order.service.domain.model.entities.OrderPhotos;
 import freela.order.service.domain.service.interfaces.IOrderPhotoService;
 import freela.order.service.infra.repository.OrderInterestRepository;
 import freela.order.service.infra.repository.OrderPhotoRepository;
+import freela.order.service.web.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderPhotoService implements IOrderPhotoService {
@@ -32,6 +34,17 @@ public class OrderPhotoService implements IOrderPhotoService {
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    @Override
+    public void delete(List<Integer> ids) {
+        for (Integer id : ids) {
+            OrderPhotos photo = this.orderPhotoRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException("Foto nao encontrada pelo id!")
+            );
+
+            this.orderPhotoRepository.delete(photo);
         }
     }
 }
